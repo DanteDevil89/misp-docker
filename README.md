@@ -12,12 +12,19 @@ The MISP container needs at least a MySQL container to store the data. By defaul
 The build is based on Ubuntu and will install all the required components. The following configuration steps are performed automatically:
 * Reconfiguration of the base URL in `config.php`
 * Generation of a new salt in `config.php`
-* Generation of a self-signed certificate
+* Generation of a self-signed certificate (TO DO)
 * Optimization of the PHP environment (php.ini) to match the MISP recommended values
 * Creation of the MySQL database
 * Generation of the admin PGP key
 
 ## Config
+* Create your self signed certificate:
+   ```
+   $ openssl genrsa -des3 -out misp.key 1024
+   $ openssl req -new -key misp.key -out misp.csr 
+   $ openssl rsa -in misp.key.org -out misp.key
+   $ openssl x509 -req -days 365 -in misp.csr -signkey misp.key -out misp.crt
+   ```
 * add your "*.crt" and "*.key" files to the ./proxy/ssl folder
 If not implementing SSL (not recommended) then simply comment out the appropriate lines in the "./proxy/default.conf" file.
 * Update "server_name" in default.conf file (will implement ENVIRONMENT VARIABLE in the future)
